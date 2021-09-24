@@ -1,0 +1,205 @@
+-- Creating the tables
+CREATE TABLE "customer" (
+  "customer_id" serial,
+  "last_name" varchar(50),
+  "first_name" varchar(50),
+  "contact" varchar(20),
+  "address" varchar(150),
+  PRIMARY KEY ("customer_id")
+);
+
+CREATE TABLE "salesperson" (
+  "salesperson_id" serial,
+  "first_name" varchar(50),
+  "last_name" varchar(50),
+  PRIMARY KEY ("salesperson_id")
+);
+
+CREATE TABLE "car" (
+  "car_serial" int,
+  "make" varchar(20),
+  "model" varchar(20),
+  "color" varchar(20),
+  "year" int,
+  "new" boolean,
+  PRIMARY KEY ("car_serial")
+);
+
+CREATE TABLE "mechanic" (
+  "mechanic_id" serial,
+  "first_name" varchar(50),
+  "last_name" varchar(50),
+  PRIMARY KEY ("mechanic_id")
+);
+
+CREATE TABLE "part" (
+  "part_id" serial,
+  "part_name" varchar(20),
+  "price" numeric(7,2),
+  PRIMARY KEY ("part_id")
+);
+
+CREATE TABLE "invoice" (
+  "invoice_id" serial,
+  "car_serial" int,
+  "salesperson_id" int,
+  "customer_id" int,
+  PRIMARY KEY ("invoice_id"),
+  FOREIGN KEY ("car_serial") REFERENCES "car"("car_serial"),
+  FOREIGN KEY(salesperson_id) REFERENCES salesperson(salesperson_id),
+  FOREIGN KEY(customer_id) REFERENCES customer(customer_id)
+);
+
+CREATE TABLE "serviceticket" (
+  "ticket_id" serial,
+  "car_serial" int,
+  "customer_id" int,
+  "receivedate" timestamp,
+  "closedate" timestamp,
+  PRIMARY KEY ("ticket_id"),
+  FOREIGN KEY(car_serial) REFERENCES car(car_serial),
+  FOREIGN KEY(customer_id) REFERENCES customer(customer_id)
+);
+
+CREATE TABLE "mechanic_in_service" (
+  "servmechanic_id" serial,
+  "mechanic_id" int,
+  "ticket_id" int,
+  "hours" int,
+  "rate" numeric(5,2),
+  PRIMARY KEY ("servmechanic_id"),
+  FOREIGN KEY(mechanic_id) REFERENCES mechanic(mechanic_id),
+  FOREIGN KEY(ticket_id) REFERENCES serviceticket(ticket_id)
+);
+
+CREATE TABLE "usedpart" (
+  "usedpart_id" serial,
+  "part_id" int,
+  "ticket_id" int,
+  "number" int,
+  "price" numeric(7,2),
+  PRIMARY KEY ("usedpart_id"),
+  FOREIGN KEY(part_id) REFERENCES part(part_id),
+  FOREIGN KEY(ticket_id) REFERENCES serviceticket(ticket_id)
+);
+
+-- Inserting values into the tables
+
+INSERT INTO salesperson(
+	salesperson_id,
+	first_name,
+	last_name)
+VALUES(
+	1,
+	'Ricky',
+	'Spanish'
+);
+
+INSERT INTO salesperson(
+	salesperson_id,
+	first_name,
+	last_name)
+VALUES(
+	2,
+	'Roger',
+	'Smith'
+);
+
+-- From here I'm going to just run the insert function twice changing just the valkues to save time.
+
+INSERT INTO car(
+	car_serial,
+	make,
+	model,
+	color
+)VALUES(
+	3,
+	'Ford',
+	'F-150',
+	'Black'
+);
+
+INSERT INTO customer(
+	customer_id,
+	last_name,
+	first_name,
+	contact,
+	address
+)VALUES(
+	2,
+	'Smith',
+	'Steve',
+	'(546) 673-9738',
+	'American dad studio CA'
+);
+
+INSERT INTO mechanic(
+	mechanic_id,
+	first_name,
+	last_name
+)VALUES(
+	2,
+	'Jeff',
+	'Fisher'
+);
+
+INSERT INTO part(
+	part_id,
+	part_name,
+	price
+)VALUES(
+	2,
+	'radiator',
+	130.00
+);
+
+INSERT INTO invoice(
+	invoice_id,
+	car_serial,
+	salesperson_id,
+	customer_id
+)VALUES(
+	2,
+	1,
+	1,
+	2
+);
+
+INSERT INTO serviceticket(
+	ticket_id,
+	car_serial,
+	customer_id
+)VALUES(
+	2,
+	2,
+	2
+);
+
+INSERT INTO mechanic_in_service(
+	servmechanic_id,
+	mechanic_id,
+	ticket_id,
+	hours,
+	rate
+)VALUES(
+	2,
+	1,
+	2,
+	10,
+	40.00
+);
+
+INSERT INTO usedpart(
+	usedpart_id,
+	part_id,
+	ticket_id,
+	price
+)VALUES(
+	2,
+	2,
+	2,
+	300.00
+);
+
+SELECT *
+FROM mechanic_in_service;
